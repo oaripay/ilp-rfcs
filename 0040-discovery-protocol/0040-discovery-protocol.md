@@ -18,13 +18,16 @@ information of its peers without exposing the public IP address.
 
 ## Terminology
 
-- **node**: a network participant that implements the Interledger Protocol
-  (ILP).
-- **settlement engine**: see [RFC
-  0038](../0038-settlement-engines/0038-settlement-engines.md)
+- **node**: a network participant that implements the Interledger Protocol (ILP).
+- **settlement engine**: see [RFC 0038](../0038-settlement-engines/0038-settlement-engines.md)
 - **carrier-peer**: or carrier-node is a node that has a settlement engine
-- **relay-peer**: or relay-node is a node that does not have a settlement
-  engine [RFC00](../0041-relays/0040-relays.md)
+- **relay-peer**: or relay-node is a node that does not have a settlement engine, see [RFC 0041](../0041-relays/0041-relays.md)
+- **bootnode**: a well-known node in the network that facilitates initial peer discovery for new nodes
+- **peer_table**: a local table containing information about all known peers in the network
+- **routing_table**: a local table containing asset/ledger specific information about peers and optimal forwarding paths
+- **node_id**: a unique identifier issued by a Certificate Authority (CA) upon verification, see [RFC 0042](../0042-identity/0042-identity.md)
+- **TTL (Time-To-Live)**: a mechanism to prevent propagation loops in peer table updates
+- **peer score**: a reputation metric based on peer responsiveness and reliability
 
 ## Design Goals
 
@@ -53,23 +56,30 @@ should be efficient wrt. determining the next most efficient hop for ILPv4
 packets. The `peer_table` is a table of all known peers of the node, this table
 is shared across the network.
 
+### Reputation system
+
+A node should be able to conditionally give a reputation to its peers,
+evaluating reliability and trustworthiness. This score is shared through the `peer_table`.
+
 ## Startup
 
 The process of booting up a new node is the following:
 
-1. Node goes through a list of **bootnodes**
+1. **Node goes through a list of bootnodes**
 
 New nodes can join the network by using a list of **bootnodes**. This list can
 either be hardcoded or fetched from an external source. For all the available
 bootnodes the new node
 
-2. sends a peering request
+2. **Sends a peering request**
 
 The peering request contains information needed for authentication [RFC
 0042](../0042-identity/0042-identity.md), upon which the two nodes authenticate
-each other. In the case of a valid authentication the new node
+each other.
 
-3. establishes a WebSocket connection with its peer.
+In the case of a valid, mutual authentication the requesting node
+
+3. **Establishes a WebSocket connection with the peer**
 
 ## Peer Relationship
 
