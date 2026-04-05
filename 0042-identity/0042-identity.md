@@ -59,9 +59,11 @@ operator as the Subject. The steps of registering a DID are the following
    subject.
 6. Subject uses the signed VC to register the DID document.
 
-For ease of use we refer to the [ilp-trust](https://github.com/oaripay/ilp-trust) cli.
+For ease of use we refer to the
+[ilp-trust](https://github.com/oaripay/ilp-trust) cli to execute the above
+defined steps.
 
-### Resolution & Handshakes
+### Verification Handshake
 
 When establishing a peer relationship, the nodes mutually prove their
 identities and eligibility by presenting a VP to the counterparty.
@@ -97,7 +99,7 @@ order:
 Only if all checks pass does the verifier accept the Subject’s resolved
 identity and proceeds with the peering relationship.
 
-### Legal Entity Credentials Registry
+### Registry
 
 EBSI defines a [Legal Entity Credential Registry
 (LECR)](https://hub.ebsi.eu/vc-framework/guidelines/le-credential-registry)
@@ -132,9 +134,8 @@ the issuers DID document, the LECR endpoints are of `type`
 }
 ```
 
-For ease of use we refer to the
-[ilp-trust](https://github.com/oaripay/ilp-trust) cli to add or remove the defined services
-services.
+Again we refer to the [ilp-trust](https://github.com/oaripay/ilp-trust) cli to
+add or remove the defined services services.
 
 # TODO: Discuss
 
