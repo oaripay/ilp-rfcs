@@ -6,7 +6,7 @@ draft: 1
 
 # Interledger Connector Identity Infrastructure
 
-### Problem
+## Problem
 
 Connectors can cheat the system. They can steal value in various ways outlined
 in [#0018](https://github.com/interledger/rfcs/blob/main/0018-connector-risk-mitigations/0018-connector-risk-mitigations.md).
@@ -16,7 +16,7 @@ it impossible for an initial grassroots network to form, because it is exactly
 these entry points, where the first connector relationships are formed, that
 are the most vulnerable and exploitable.
 
-### Solution
+## Solution
 
 We utilize zero-knowledge proofs through [W3C Verifiable
 Credentials](https://www.w3.org/TR/vc-data-model-2.0/) data model deployed on a
@@ -31,7 +31,7 @@ and [Verifiable
 Presentations](https://www.w3.org/TR/vc-data-model/#verifiable-presentations)
 VPs.
 
-### EBSI Onboarding
+## EBSI Onboarding
 
 A prerequisite for a node provider willing to participate in the network and
 take part in successful verification handshakes, is a Verifiable Credential
@@ -49,21 +49,18 @@ operator as the Subject. The steps of registering a DID are the following
 
 1. Subject generates an ES256 and an ES256K key pair and
    sends the derived DID to the Issuer.
-2. The Issuer crafts [Credential
-   Subject](https://www.w3.org/TR/vc-data-model/#credential-subject) payload
-   with the subject's information obtained through KYC/KYB.
-3. Issuer encrypts all fields, except the `id`, of the `credentialSubject` with
-   the RTAO's public key (?).
-4. Issuer creates a VC payload with the `credentialSubject` payload.
-5. Issuer signs the VC payload with the ES256 private key and hands it to the
+2. The Issuer creates an `ILP License`, optionally including the subjects
+   country code in the license
+3. Issuer creates a VC payload with the `credentialSubject` payload.
+4. Issuer signs the VC payload with the ES256 private key and hands it to the
    subject.
-6. Subject uses the signed VC to register the DID document.
+5. Subject uses the signed VC to register the DID document.
 
 For ease of use we refer to the
 [ilp-trust](https://github.com/oaripay/ilp-trust) cli to execute the above
 defined steps.
 
-### Verification Handshake
+## Verification Handshake
 
 When establishing a peer relationship, the nodes mutually prove their
 identities and eligibility by presenting a VP to the counterparty.
@@ -80,7 +77,7 @@ order:
 2. **Verify the VC (Issuer authentication)**
    1. From the VC, resolve the Issuer DID in the EBSI DID Registry.
    2. Verify the VC signature using the Issuer DID Document key from the DID Registry.
-   3. Verify the `credentialStatus` and `credentialSchema` of the Issuer (?).
+   3. Verify that the Issuer is allowed to issue an `ILP License`
 
 3. **Check revocation status (Credential validity)**
    1. Use the Issuer `service` entries in the DID registry or `proxies` from
@@ -99,7 +96,7 @@ order:
 Only if all checks pass does the verifier accept the Subject’s resolved
 identity and proceeds with the peering relationship.
 
-### Registry
+## Registry
 
 EBSI defines a [Legal Entity Credential Registry
 (LECR)](https://hub.ebsi.eu/vc-framework/guidelines/le-credential-registry)
@@ -111,7 +108,7 @@ verification. Additionally an API endpoint for the entry node list is provided.
 issue, and an API endpoint providing the entry node list, so verifiers can
 reliably check VC status through the registry defined in the Issuers DID
 document as a `service` or a `proxylist` and verified subjects can enter into
-the network reliably.
+the network with a designated, trusted node list.
 
 The Endpoints are found in the `service` section under the `serviceEndpoint` of
 the issuers DID document, the LECR endpoints are of `type`
@@ -137,9 +134,15 @@ the issuers DID document, the LECR endpoints are of `type`
 Again we refer to the [ilp-trust](https://github.com/oaripay/ilp-trust) cli to
 add or remove the defined services services.
 
-# TODO: Discuss
+## TODO: Discuss
+
+2. The Issuer crafts a [Credential
+   Subject](https://www.w3.org/TR/vc-data-model/#credential-subject) payload
+   with the subject's information obtained through KYC/KYB. (?)
+   - What do we write here only the country ?
 
 3. Issuer encrypts all fields, except the `id`, of the `credentialSubject` with
    the RTAO's public key (?).
+   - Cons: Issuer additionally needs to host one part of a newly generated, independent asymetric key pair
 
-4. Verify the `credentialStatus` and `credentialSchema` of the Issuer (?).
+- Schema checking: can an issuer issue VCs according to this schema
